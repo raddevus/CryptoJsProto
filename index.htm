@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TryAES</title>
+        <script src="js/aes.js"></script>
+    </head>
+    <body>
+        <div id="encrypted">
+        </div>
+        <div id="decrypted">
+
+        </div>
+        <script>
+            var plainText = "This is a an extremely long message <strong> with </strong> CRLF \n and other items in it.";
+            var key = CryptoJS.enc.Hex.parse('76CE9BBA9487266738E3C4F0B3CFA4BE0C0EBA52ED1C3C425E06900442EFE5E1'); 
+            var iv = CryptoJS.enc.Hex.parse('76CE9BBA9487266738E3C4F0B3CFA4BE'); 
+            var encrypted = CryptoJS.AES.encrypt(plainText, key, { iv: iv }); 
+            //var encrypted = CryptoJS.AES.encrypt(plainText, "Secret"); 
+            //var cipherText = CryptoJS.enc.Hex.parse(String(encrypted.ciphertext));
+            //console.log("cipherText : " + cipherText);
+            document.getElementById("encrypted").innerHTML = encrypted;
+            var decrypted = CryptoJS.AES.decrypt(encrypted,  key, { iv: iv });
+            //var decrypted = CryptoJS.AES.decrypt(encrypted, "Secret");
+            console.log("decrypted: " + decrypted.toString());
+            let plainTextOut = decodeHexString(decrypted.toString());
+            console.log(plainTextOut);
+            document.getElementById("decrypted").innerHTML = plainTextOut; 
+
+            function decodeHexString(stringOfHexBytes){
+                var localPlainText = "";
+                var currentByte = "";
+                for (var x = 0;x < stringOfHexBytes.length;x++){
+                 currentByte = stringOfHexBytes[x] + stringOfHexBytes[++x]; 
+                 localPlainText += String.fromCharCode(parseInt(currentByte,16));
+                }
+            return localPlainText;
+            }
+        </script>
+    </body>
+</html>
